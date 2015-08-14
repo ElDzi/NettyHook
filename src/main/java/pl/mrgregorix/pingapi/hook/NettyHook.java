@@ -68,13 +68,6 @@ public final class NettyHook
         for(ChannelFuture future : channelFutures)
         {
             future.channel().pipeline().addFirst("NettyHook|" + name, handler);
-
-            System.out.println(handler + " registered to " + future.channel());
-
-            for (Map.Entry<String, ChannelHandler> h : future.channel().pipeline())
-            {
-                System.out.println(h.getKey());
-            }
         }
     }
 
