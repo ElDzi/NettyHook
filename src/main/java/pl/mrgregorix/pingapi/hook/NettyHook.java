@@ -78,11 +78,6 @@ public final class NettyHook
         }
     }
 
-    public void addToOwns(ChannelHandler handler)
-    {
-
-    }
-
     public void unregisterOwn()
     {
         for (ChannelHandler handler : ownHandlers)
