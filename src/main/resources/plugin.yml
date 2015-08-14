@@ -1,0 +1,5 @@
+name: PingAPI
+author: MrGregorix
+#load: STARTUP
+version: '${project.version}'
+main: 'pl.mrgregorix.pingapi.Plugin'
