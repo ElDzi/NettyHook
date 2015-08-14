@@ -7,8 +7,6 @@ import pl.mrgregorix.pingapi.hook.init.InboundHandlerRegister;
 import pl.mrgregorix.pingapi.hook.utils.ReflectionUtils;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
 
 public final class NettyHook
 {
@@ -18,7 +16,7 @@ public final class NettyHook
     private              List<ChannelFuture>        channelFutures;
     private        final List<ChannelHandler>       ownHandlers         = Lists.newArrayList();
     private        final String                     name;
-    private static       List<PacketHandler>        packetHandlers      = Lists.newArrayList();
+    private        final List<PacketHandler>        packetHandlers      = Lists.newArrayList();
 
     public NettyHook(String name)
     {
@@ -36,7 +34,7 @@ public final class NettyHook
             selfInit();
     }
 
-    public static List<PacketHandler> getPacketHandlers()
+    public List<PacketHandler> getPacketHandlers()
     {
         return packetHandlers;
     }
@@ -59,7 +57,7 @@ public final class NettyHook
 
     public void registerPredefinedChannels()
     {
-        register(new InboundHandlerRegister(name));
+        register(new InboundHandlerRegister(name, this));
     }
 
     public void register(ChannelHandler handler)
