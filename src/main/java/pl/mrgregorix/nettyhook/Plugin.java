@@ -1,15 +1,10 @@
 package pl.mrgregorix.nettyhook;
 
-import net.minecraft.server.v1_8_R3.IChatBaseComponent;
-import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import pl.mrgregorix.nettyhook.hook.NettyHook;
 import pl.mrgregorix.nettyhook.hook.PacketHandler;
-import pl.mrgregorix.nettyhook.hook.utils.ReflectionUtils;
 
 public class Plugin extends JavaPlugin implements Listener
 {
@@ -45,18 +40,5 @@ public class Plugin extends JavaPlugin implements Listener
     public void onDisable()
     {
         debuggerHook.unregisterOwn();
-    }
-
-    @EventHandler
-    public void onPlayerCmd(PlayerCommandPreprocessEvent event)
-    {
-        PacketPlayOutChat chat = new PacketPlayOutChat(IChatBaseComponent.ChatSerializer.a(
-                        "[" +
-                            "{text: \"Debug \", color: \"green\"}," +
-                            "{text: \"Lubie w Pupe\", color: \"red\"}" +
-                        "]"
-        ));
-
-        debuggerHook.getPlayerChannelManager().getPlayerHandler(event.getPlayer()).sendPacket(chat);
     }
 }

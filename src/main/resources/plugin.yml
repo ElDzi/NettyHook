@@ -1,4 +1,4 @@
-name: PingAPI
+name: NettyHook
 author: MrGregorix
 load: STARTUP
 version: '${project.version}'

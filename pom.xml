@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>pl.mrgregorix</groupId>
-    <artifactId>pingapi</artifactId>
+    <artifactId>nettyhook</artifactId>
     <version>1.0</version>
 
     <build>
