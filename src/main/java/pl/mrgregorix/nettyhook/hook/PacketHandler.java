@@ -1,17 +1,14 @@
-package pl.mrgregorix.pingapi.hook;
+package pl.mrgregorix.nettyhook.hook;
 
 import com.mojang.authlib.GameProfile;
-import io.netty.channel.ChannelDuplexHandler;
-import io.netty.channel.ChannelHandler;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelPromise;
+import io.netty.channel.*;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
-import pl.mrgregorix.pingapi.hook.utils.ReflectionUtils;
+import pl.mrgregorix.nettyhook.hook.utils.ReflectionUtils;
 
 import java.util.Arrays;
 import java.util.UUID;
@@ -19,11 +16,12 @@ import java.util.UUID;
 @ChannelHandler.Sharable
 public abstract class PacketHandler extends ChannelDuplexHandler implements Listener
 {
-    private static final    Class       successLoginClass = ReflectionUtils.getNMSClass("PacketLoginOutSuccess");
-    private                 Player      player;
-    private                 UUID        uuid;
-    private                 Class[]     inFilterList;
-    private                 Class[]     outFilterList;
+    private static final       Class       PACKET_CLASS = ReflectionUtils.getNMSClass("PacketLoginOutSuccess");
+    private                    Player      player;
+    private                    UUID        uuid;
+    private                    Class[]     inFilterList;
+    private                    Class[]     outFilterList;
+    protected                  Channel     channel;
 
     public final void setInFilter(String... filter)
     {
@@ -78,9 +76,9 @@ public abstract class PacketHandler extends ChannelDuplexHandler implements List
     @Override
     public final void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception
     {
-        if(successLoginClass.isInstance(msg))
+        if(PACKET_CLASS.isInstance(msg))
         {
-            GameProfile profile = (GameProfile) ReflectionUtils.getPrivateField(successLoginClass, ReflectionUtils.byClass(successLoginClass, GameProfile.class).getName(), msg);
+            GameProfile profile = (GameProfile) ReflectionUtils.getPrivateField(PACKET_CLASS, ReflectionUtils.byClass(PACKET_CLASS, GameProfile.class).getName(), msg);
 
             uuid = profile.getId();
         }
@@ -96,6 +94,21 @@ public abstract class PacketHandler extends ChannelDuplexHandler implements List
         super.write(ctx, msg, promise);
     }
 
+    public Player getPlayer()
+    {
+        return player;
+    }
+
+    public UUID getUUID()
+    {
+        return uuid;
+    }
+
     public abstract void onPacketOut(Object packet, Player player);
     public abstract void onPacketIn(Object packet, Player player);
+
+    public void setChannel(Channel channel)
+    {
+        this.channel = channel;
+    }
 }

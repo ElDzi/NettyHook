@@ -5,16 +5,18 @@
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import pl.mrgregorix.pingapi.hook.NettyHook;
-import pl.mrgregorix.pingapi.hook.PacketHandler;
-import pl.mrgregorix.pingapi.hook.utils.ReflectionUtils;
+import pl.mrgregorix.nettyhook.hook.NettyHook;
+import pl.mrgregorix.nettyhook.hook.PacketHandler;
+import pl.mrgregorix.nettyhook.hook.utils.ReflectionUtils;
 
 public class Example1 extends JavaPlugin
 {
+    private NettyHook hook;
+
     @Override
     public void onEnable()
     {
-        NettyHook hook = new NettyHook("Example1");
+        hook = new NettyHook("Example1");
 
         PacketHandler handler = new PacketHandler()
         {
@@ -34,5 +36,11 @@ public class Example1 extends JavaPlugin
         handler.setOutFilter("PacketPlayOutChat");
 
         hook.registerPacketListener(handler);
+    }
+
+    @Override
+    public void onDisable()
+    {
+        hook.unregisterOwn();
     }
 }

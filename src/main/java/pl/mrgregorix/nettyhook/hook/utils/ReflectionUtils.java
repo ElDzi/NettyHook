@@ -1,4 +1,4 @@
-package pl.mrgregorix.pingapi.hook.utils;
+package pl.mrgregorix.nettyhook.hook.utils;
 
 import com.google.common.collect.Maps;
 import org.apache.commons.lang.Validate;

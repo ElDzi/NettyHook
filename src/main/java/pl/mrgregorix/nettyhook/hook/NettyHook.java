@@ -1,12 +1,14 @@
-package pl.mrgregorix.pingapi.hook;
+package pl.mrgregorix.nettyhook.hook;
 
 import com.google.common.collect.Lists;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandler;
-import pl.mrgregorix.pingapi.hook.init.InboundHandlerRegister;
-import pl.mrgregorix.pingapi.hook.utils.ReflectionUtils;
+import pl.mrgregorix.nettyhook.PlayerChannelManager;
+import pl.mrgregorix.nettyhook.hook.init.InboundHandlerRegister;
+import pl.mrgregorix.nettyhook.hook.utils.ReflectionUtils;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public final class NettyHook
 {
@@ -17,6 +19,7 @@ public final class NettyHook
     private        final List<ChannelHandler>       ownHandlers         = Lists.newArrayList();
     private        final String                     name;
     private        final List<PacketHandler>        packetHandlers      = Lists.newArrayList();
+    private              PlayerChannelManager       playerChannelManager;
 
     public NettyHook(String name)
     {
@@ -52,12 +55,18 @@ public final class NettyHook
     public void registerPacketListener(PacketHandler handler)
     {
         packetHandlers.add(handler);
+        addOwn(handler);
+    }
 
+    public void addOwn(ChannelHandler handler)
+    {
+        ownHandlers.add(handler);
     }
 
     public void registerPredefinedChannels()
     {
         register(new InboundHandlerRegister(name, this));
+        registerPacketListener((playerChannelManager = new PlayerChannelManager(this)));
     }
 
     public void register(ChannelHandler handler)
@@ -73,7 +82,19 @@ public final class NettyHook
     {
         for (ChannelHandler handler : ownHandlers)
             for (ChannelFuture future : channelFutures)
-                future.channel().pipeline().remove(handler);
+                try
+                {
+                    future.channel().pipeline().remove(handler);
+                }
+                catch (NoSuchElementException e)
+                {
+                    //Ignore
+                }
+    }
+
+    public PlayerChannelManager getPlayerChannelManager()
+    {
+        return playerChannelManager;
     }
 
     public void selfInit()

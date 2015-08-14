@@ -1,9 +1,10 @@
-package pl.mrgregorix.pingapi.hook.init;
+package pl.mrgregorix.nettyhook.hook.init;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
-import pl.mrgregorix.pingapi.hook.NettyHook;
-import pl.mrgregorix.pingapi.hook.PacketHandler;
+import net.minecraft.server.v1_8_R3.PacketLoginInStart;
+import pl.mrgregorix.nettyhook.hook.NettyHook;
+import pl.mrgregorix.nettyhook.hook.PacketHandler;
 
 
 public class EndChannelInitializer extends ChannelInitializer<Channel>
@@ -23,6 +24,10 @@ public class EndChannelInitializer extends ChannelInitializer<Channel>
     protected void initChannel(Channel channel) throws Exception
     {
         for(PacketHandler handler : hook.getPacketHandlers())
+        {
+            handler.setChannel(channel);
             channel.pipeline().addBefore("packet_handler", "NettyHook|PH" + name + "|" + (ID++), handler);
+            hook.addOwn(handler);
+        }
     }
 }

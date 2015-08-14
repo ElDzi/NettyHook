@@ -1,9 +1,9 @@
-package pl.mrgregorix.pingapi.hook.init;
+package pl.mrgregorix.nettyhook.hook.init;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-import pl.mrgregorix.pingapi.hook.NettyHook;
+import pl.mrgregorix.nettyhook.hook.NettyHook;
 
 public class InboundHandlerRegister extends ChannelInboundHandlerAdapter
 {

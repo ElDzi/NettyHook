@@ -1,5 +1,5 @@
 name: PingAPI
 author: MrGregorix
-#load: STARTUP
+load: STARTUP
 version: '${project.version}'
-main: 'pl.mrgregorix.pingapi.Plugin'
+main: 'pl.mrgregorix.nettyhook.Plugin'
